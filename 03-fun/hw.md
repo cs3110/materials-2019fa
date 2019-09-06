@@ -28,8 +28,8 @@ grk : string -> bool = <fun>
      `grk`.
    * Making the `string` argument a labelled argument.
       
-3. Do the exercises named **fib**, **poly types**, **associativity**,
-   and **print int list rec** from the current chapter of the textbook.
+3. Do the exercises named **fib**, **poly types**, and **associativity**
+   from the current chapter of the textbook.
    
 4. As a challenge, also do the **fib fast** exercise.
 
