@@ -13,4 +13,4 @@
 3. Do the exercises named **date before**, **pokerecord**, **product**, 
    **library**, and **take drop**.
 
-4. As a challenge, also do **powerset**, **take drop**, and **take drop tail**.
+4. As a challenge, also do **powerset** and **take drop tail**.
