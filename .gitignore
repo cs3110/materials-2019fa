@@ -1,3 +1,6 @@
+# files written during lecture
+lec.ml
+
 # ocaml
 *.cmo
 *.cma
