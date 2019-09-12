@@ -2,6 +2,8 @@
 
 type primary_color = Red | Blue | Green
 
+let c = Red
+
 (* more complicated variant with non-constant constructors *)
 
 type point = float * float
@@ -10,6 +12,8 @@ type shape =
   | Circle of {center : point; radius : float}
   | Rectangle of {lower_left : point; upper_right : point}
   (* | Point of point *) (* we'll add this later: when we do note warning *)
+
+let s = Circle {center=(0.,0.); radius=1.}
 
 let mid a b =
   (b -. a) /. 2.
