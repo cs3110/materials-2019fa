@@ -10,7 +10,7 @@
    - find the elements of a list that are between `90` and `100`, inclusive
    - finding the maximum of a list of integers
    - truncating each string in a list to at most 5 characters long and replacing
-     the rest of the characters with an elipsis
+     the rest of the characters with an ellipsis
       
 3. Do the exercises named **repeat**, **sum_cube_odd**, **exists**, **uncurry**,
    **curry**, and **tree map**.
