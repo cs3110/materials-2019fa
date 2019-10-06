@@ -1,7 +1,6 @@
 # Homework 11
 
-1. Prove that $(\\mathit{fun}~n \rightarrow 2n^2) 
-\in O(\\mathit{fun}~n \rightarrow n^3)$.
+1. Prove that (fun n -> 2n^2) is in O(fun n -> n^3).
 
-2. Prove that $O$ is *transitive*, that is, if $f$ is $O(g)$
-and $g$ is $O(h)$, then $f$ is $O(h)$.
+2. Prove that membership in O is *transitive*, that is, if f is in O(g)
+and g is in O(h), then f is in O(h).
