@@ -113,23 +113,17 @@ module ListQueue : Queue = struct
 end
 
 (* Here is a second, more efficient implementation of the Queue interface, 
-   using two lists to represent a single queue. This representation seems
-   to have been invented independently by (i) Hood and Melville [1]
-   and (ii) our very own Prof. David Gries [2].  
-   [1]: Robert Hood and Robert Melville.  Real-time queue operations
-        in pure LISP.  Information Processing Letters, 13(2):50-53, 
-        November 1981.  
-   [2]: David Gries.  The Science of Programming.  Springer-Verlag,
-        New York, 1981. (p. 55) *)
+   using two lists to represent a single queue. This representation was invented
+   by Robert Melville as part of his PhD dissertation at Cornell, *Asymptotic
+   Complexity of Iterative Computations*, Jan 1981, which was advised by Prof.
+   David Gries. *)
 
 module TwoListQueue : Queue = struct
-  (* [{front=[a;b]; back=[e;d;c]}] represents the queue
-     containing the elements a,b,c,d,e. That is, the
-     back of the queue is stored in reverse order. 
-     [{front; back}] is in *normal form* if [front]
-     being empty implies [back] is also empty. 
-     All queues passed into or out of the module 
-     must be in normal form. *)
+  (* [{front=[a;b]; back=[e;d;c]}] represents the queue containing the elements
+     a,b,c,d,e. That is, the back of the queue is stored in reverse order.
+     [{front; back}] is in *normal form* if [front] being empty implies [back]
+     is also empty. All queues passed into or out of the module must be in
+     normal form. *)
   type 'a queue = {front:'a list; back:'a list}
 
   let empty = {front=[]; back=[]}
