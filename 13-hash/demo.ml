@@ -80,28 +80,34 @@ module type DirectAddressMap = sig
       [int] to values of type ['v]. *)
   type 'v t
 
-  (* [create c] creates a new map with capacity [c]. *)
+  (* [create c] creates a new map with capacity [c]. Keys [0] through [c-1]
+     are _in bounds_ for the map. *)
   val create : int -> 'v t
 
   (**[insert k v m] mutates map [m] to bind [k] to [v].  If [k] was already
-     bound in [m], that binding is replaced by the binding to [v]. *)
+     bound in [m], that binding is replaced by the binding to [v]. 
+     Requires: [k] is in bounds. *)
   val insert : int -> 'v -> 'v t -> unit
 
   (** [find k m] is [Some v] if [k] is bound to [v] in [m],
-      and [None] if not. *)
+      and [None] if not. 
+      Requires: [k] is in bounds. *)
   val find : int -> 'v t -> 'v option
 
   (** [remove k m] mutates [m] to remove any binding of [k].
-      If [k] was not bound in [m], then the map is unchanged. *)
+      If [k] was not bound in [m], then the map is unchanged.
+      Requires: [k] is in bounds. *)
   val remove : int -> 'v t -> unit
 
   (** [bindings m] is an association list containing the same bindings
       as [m]. *)
   val bindings : 'v t -> (int * 'v) list
 
-  (** [of_list lst] creates a map with the same bindings as [m].
-      Requires: [lst] does not contain any duplicate keys. *)
-  val of_list : (int * 'v) list -> 'v t
+  (** [of_list c lst] creates a map with the same bindings as [m] and with
+      capacity [c].
+      Requires: [lst] does not contain any duplicate keys, and every key
+      in [m] is in bounds. *)
+  val of_list : int -> (int * 'v) list -> 'v t
 end
 
 module ArrayMap : DirectAddressMap = struct
@@ -137,9 +143,10 @@ module ArrayMap : DirectAddressMap = struct
     !bs
 
   (** Efficiency: O(n) *)
-  let of_list lst =
-    let m = create (List.length lst) in  (* O(n) *)
-    List.iter (fun (k, v) -> insert k v m) lst; (* O(1) work n times is O(n) *)
+  let of_list c lst =
+    let m = create c in  (* O(n) *)
+    List.iter (fun (k, v) -> insert k v m) lst;
+    (* O(1) work O(n) times is O(n) *)
     m
 
 end
