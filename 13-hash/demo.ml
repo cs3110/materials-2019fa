@@ -225,8 +225,11 @@ module HashMap : TableMap = struct
       Efficiency: O(L) *)
   let insert_no_resize k v tab =
     let b = index k tab in (* O(1) *)
+    let old_bucket = tab.buckets.(b) in
     tab.buckets.(b) <- (k,v) :: List.remove_assoc k tab.buckets.(b); (* O(L) *)
-    tab.size <- tab.size + 1 (* O(1) *)
+    if List.length old_bucket != List.length tab.buckets.(b) then begin
+      tab.size <- tab.size + 1 (* O(1) *)
+    end else () 
 
   (** [rehash tab new_capacity] replaces the buckets array of [tab] with a new
       array of size [new_capacity], and re-inserts all the bindings of [tab]
@@ -276,8 +279,11 @@ module HashMap : TableMap = struct
       Efficiency: O(L) *)
   let remove_no_resize k tab =
     let b = index k tab in
+    let old_bucket = tab.buckets.(b) in
     tab.buckets.(b) <- List.remove_assoc k tab.buckets.(b);
-    tab.size <- tab.size - 1
+    if List.length old_bucket != List.length tab.buckets.(b) then begin
+      tab.size <- tab.size - 1
+    end else ()
 
   (** Efficiency: O(n)
       (but like [insert], in next lecture will be made O(1).) *)
