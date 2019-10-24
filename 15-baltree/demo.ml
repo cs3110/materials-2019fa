@@ -35,7 +35,7 @@ module BstSet = struct
   type 'a t = Leaf | Node of 'a t * 'a * 'a t
 
   let empty = 
-    failwith "TODO"
+    Leaf
 
   let rec mem x s =
     failwith "TODO"
