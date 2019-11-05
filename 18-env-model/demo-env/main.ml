@@ -14,7 +14,6 @@ type env = value Env.t
 and value = 
   | VInt of int
   | VBool of bool
-  | VClosure of string * expr * env
 
 (** The error message produced if a variable is unbound. *)
 let unbound_var_err = "Unbound variable"
