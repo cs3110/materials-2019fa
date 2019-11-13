@@ -148,13 +148,14 @@ we will need mathematical induction.
 Recall that induction on the natural numbers (i.e., the non-negative integers)
 is formulated as follows:
 ```
-To show P(n),
-  show P(0),
-  and show that if P(k) holds, then P(k + 1) holds.
+forall properties P,
+  if P(0),
+  and if forall k, P(k) implies P(k + 1),
+  then forall n, P(n)
 ```
-The *base case* is to prove `P(0)`, and the *inductive case* is to
-prove that `P(k + 1)` holds under the assumption of the *inductive
-hypothesis* `P(k)`.
+That is called the *induction principle* for natural numbers. The *base case* is
+to prove `P(0)`, and the *inductive case* is to prove that `P(k + 1)` holds
+under the assumption of the *inductive hypothesis* `P(k)`.
 
 Let's use induction to prove the correctness of `sumto`.
 ```
@@ -256,7 +257,8 @@ Both the OCaml and Java implementation of `facti` share these features:
 - they decrement `n`
 - they return the accumulator, `acc`
 
-Let's try to prove that `fact_tr` correctly implements the same computation as `fact`.
+Let's try to prove that `fact_tr` correctly implements the same computation
+as `fact`.
 
 ```
 Claim: forall n, fact n = fact_tr n
