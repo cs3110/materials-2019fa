@@ -633,7 +633,189 @@ computation than `exp`.
 
 ## Solutions to Exercises
 
-In progress.
+### Exercise 1
+
+```
+Claim: exp x (m + n) = exp x m * exp x n
+
+Proof: by induction on m.
+P(m) = exp x (m + n) = exp x m * exp x n
+
+Base case: m = 0
+Show: exp x (0 + n) = exp x 0 * exp x n
+
+  exp x (0 + n)
+=   { evaluation }
+  exp x n
+
+  exp x 0 * exp x n
+=   { evaluation }
+  1 * exp x n
+=   { evaluation }
+  exp x n
+
+Inductive case: m = k + 1
+Show: exp x ((k + 1) + n) = exp x (k + 1) * exp x n
+IH: exp x (k + n) = exp x k * exp x n
+
+  exp x ((k + 1) + n)
+=   { evaluation }
+  x * exp x (k + n)
+=   { IH }
+  x * exp x k * exp x n
+
+  exp x (k + 1) * exp x n
+=   { evaluation }
+  x * exp x k * exp x n
+
+QED
+```
+
+### Exercise 2
+
+```
+
+Claim: forall n >= 1, fib n = fibi n (0, 1)
+
+We need to strengthen the hypothesis for the induction to go through. 
+
+    Lemma: forall n >= 1, forall m >= 1, fib (n + m) = fibi n (fib m, fib (m + 1))
+    Proof: by induction on n.
+
+    Base case: n = 1
+    Show: forall m >= 1, fib (1 + m) = fibi 1 (fib m, fib (m + 1))
+
+        fibi 1 (fib m, fib (m + 1))
+    =    { evaluation }
+        fib (m + 1)
+    =    { algebra }
+        fib (1 + m)
+
+    Inductive case: n = k + 1
+    Show: forall m >= 1, fib ((k + 1) + m) = fibi (k + 1) (fib m, fib (m + 1))
+    IH: forall m >= 1, fib (k + m) = fibi k (fib m, fib (m + 1))
+
+                fib ((k + 1) + m)
+            =      { algebra }
+                fib (k + (m + 1))
+            =      { IH with m := m + 1 }
+                fibi k (fib (m + 1), fib (m + 2))
+            =      { evaluation }
+                fibi k (fib (m + 1), fib m + fib (m + 1))
+
+                fibi (k + 1) (fib m, fib (m + 1))
+            =      { evaluation }
+                fibi k (fib (m + 1), fib m + fib (m + 1))
+
+    QED
+
+We cannot apply the lemma directly because (fib m) is not equal
+to 0 for any m. We proceed by breaking `n` into two cases.
+
+Case 1: n = 1.
+Show: fib 1 = fibi 1 (0, 1)
+
+    fib 1
+=    { evaluation }
+    1
+
+    fibi 1 (0, 1)
+=    { evaluation }
+    1
+
+Case 2: n = k + 1, k >= 1.
+Show: fib (k + 1) = fibi (k + 1) (0, 1)
+
+    fib (k + 1)
+=    { Lemma with n := k, m := 1 } 
+    fibi k (fib 1, fib 2)
+=    { evaluation }
+    fibi k (1, 1)
+
+    fibi (k + 1) (0, 1)
+=    { evaluation }
+    fibi k (1, 1)
+
+QED
+```
+
+### Exercise 3
+
+```
+Claim: forall n x, expsq x n  = exp x n
+
+Proof: by induction on n.
+P(n) = forall x, expsq x n  = exp x n
+
+Base case 0:  n = 0
+Show: forall x, expsq x 0  = exp x 0
+
+  expsq x 0 
+=   { evaluation }
+  1
+  
+  exp x 0 
+=   { evaluation }
+  1
+
+Base case 1:  n = 1
+Show: forall x, expsq x 1  = exp x 1
+
+  expsq x 1 
+=   { evaluation }
+  x
+
+  exp x 1
+=   { evaluation }
+  x * exp x 0
+=   { evaluation and algebra }
+  x 
+
+Inductive case for even n: n = 2k
+Show: forall x, expsq x 2k  = exp x 2k
+IH: forall x, forall j < 2k, expsq x j  = exp x j
+
+  expsq x 2k
+=   { evaluation }
+  1 * expsq (x * x) (2k / 2)
+=   { IH, instantiating its x as (x * x)
+      and j as (2k / 2) }
+  exp (x * x) k
+=   { evaluation }
+  (x * x) * exp (x * x) (k - 1)
+
+  exp x 2k
+=   { evaluation }
+  x * exp x (2k - 1)
+=   { evaluation }
+  (x * x) exp x (2k - 2)
+=   { IH, instantiating its x as x and j as (2k - 2) }
+  (x * x) * expsq x (2k - 2)
+=   { evaluation and algebra }
+  (x * x) * expsq (x * x) (k - 1)
+=   { IH, instantiating its x as (x * x) and j as (k - 1) }
+  (x * x) * exp (x * x) (k - 1)
+
+Inductive case for odd n: n = 2k + 1
+Show: forall x, expsq x (2k + 1) = exp x (2k + 1)
+IH: forall x, forall j < 2k, expsq x j  = exp x j
+
+  expsq x (2k + 1)
+=   { evaluation }
+  x * expsq (x * x) ((2k + 1) / 2)
+=   { by the properties of integer division }
+  x * expsq (x * x) k
+
+  exp x (2k + 1)
+=   { evaluation }
+  x * exp x 2k
+=   { IH, instantiating its x as x, and j as 2k) }
+  x * expsq x 2k
+=   { evaluation and algebra }
+  x * expsq (x * x) k
+
+QED
+```
 
 ## Acknowledgements
 
