@@ -23,7 +23,6 @@ Show: forall ys, length ([] @ ys) = length [] + length ys
   length ys
 
 Inductive case: xs = h :: t
-(* pause here for iclicker:  what is the IH? *)
 IH:  forall ys, length (t @ ys) = length t + length ys
 Show:  forall ys, length ((h :: t) @ ys) = length (h :: t) + length ys
 
