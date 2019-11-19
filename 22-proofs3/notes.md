@@ -582,15 +582,15 @@ equational specification:
 ```
 
 Consider, though, these two sets:
-- `insert 0 (insert 1 empty)`
-- `insert 1 (insert 0 empty)`
+- `add 0 (add 1 empty)`
+- `add 1 (add 0 empty)`
 
 They both intuitively represent the set {0,1}.  Yet, we cannot prove
 that those two sets are equal using the above specification.  We are
 missing an equation involving two generators:
 
 ```
-7.  insert x (insert y s) = insert y (insert x s)
+7.  add x (add y s) = add y (add x s)
 ```
 
 ## Exercises
