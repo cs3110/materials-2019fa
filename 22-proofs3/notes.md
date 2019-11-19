@@ -548,8 +548,8 @@ following equations:
      the original expression by reducing it to an generator applied to a
      smaller argument, `deq q` instead of `deq (enq x q)`.
 
-We don't usually design equations involving pairs of non-generators, or pairs of
-generators.
+We don't usually design equations involving pairs of non-generators.  Sometimes
+pairs of generators are needed, though, as we will see in the next example.
 
 ## Sets
 
@@ -581,15 +581,95 @@ equational specification:
 6b. remove y (add x s) = add x (remove y s)   if x <> y
 ```
 
+Consider, though, these two sets:
+- `insert 0 (insert 1 empty)`
+- `insert 1 (insert 0 empty)`
+
+They both intuitively represent the set {0,1}.  Yet, we cannot prove
+that those two sets are equal using the above specification.  We are
+missing an equation involving two generators:
+
+```
+7.  insert x (insert y s) = insert y (insert x s)
+```
+
 ## Exercises
 
-In progress.
+### Exercise 1
+
+A *bag* or *multiset* is like a blend of a list and a set:  like a set, order
+does not matter; like a list, elements may occur more than once.  The number of
+times an element occurs is its *multiplicity*.  An element that does not occur
+in the bag has multiplicity 0. Here is an OCaml signature for bags:
+```
+module type Bag = sig
+  type 'a t
+  val empty : 'a t
+  val is_empty : 'a t -> bool
+  val insert : 'a -> 'a t -> 'a t
+  val mult : 'a -> 'a t -> int
+  val remove : 'a -> 'a t -> 'a t
+end
+```
+
+Categorize the operations in the `Bag` interface as generators, manipulators,
+or queries.  Then design an equational specification for bags.  For the `remove`
+operation, your specification should cause at most one occurrence of an element
+to be removed.  That is, the multiplicity of that value should decrease
+by at most one.
+
+### Exercise 2
+
+Design an OCaml interface for lists that has `nil`, `cons`, `append`,
+and `length` operations.  Design the equational specification. Hint:
+the equations will look strikingly like the OCaml implementations of
+`@` and `List.length`.
 
 ## Solutions
 
-In progress.
+### Exercise 1
+
+Generators: `empty`, `insert`.  Manipulator: `remove`.  Queries: `is_empty`, 
+`mult`.
+
+Specification:
+```
+1.  is_empty empty = true
+2.  is_empty (insert x b) = false
+3.  mult x empty = 0
+4a. mult y (insert x b) = 1 + mult y b              if x = y
+4b. mult y (insert x b) = mult y b                  if x <> y
+5.  remove x empty = empty
+6a. remove y (insert x b) = remove y b              if x = y
+6b. remove y (insert x b) = insert x (remove y b)   if x <> y
+7.  insert x (insert y b) = insert y (insert x b)
+```
+
+### Exercise 2
+
+Operations:
+```
+module type List = sig
+  type 'a t
+  val nil : 'a t
+  val cons : 'a -> 'a t -> 'a t
+  val append : 'a t -> 'a t -> 'a t
+  val length : 'a t -> int
+end
+```
+
+Equations:
+```
+1. append nil lst = lst
+2. append (cons h t) lst = cons h (append t lst)
+3. length nil = 0
+4. length (cons h t) = 1 + length t
+```
 
 ## Acknowledgements
+
+The example specifications above are based on McCloskey.  The terminology
+of "generator", "manipulator", and "query" is based on Pfleeger and Atlee.
 
 - "Algebraic Specifications", Robert McCloskey, 
   https://www.cs.scranton.edu/~mccloske/courses/se507/alg_specs_lec.html.
