@@ -631,7 +631,7 @@ let f x = snd ((fun x -> x,x) (fst x))
 
 This lecture is based on the paper [Propositions as Types][pat] by Philip
 Wadler.  You can watch an entertaining [recorded lecture][pat-lambda-days]
-recorded lecture by Prof. Wadler on this material.
+lecture by Prof. Wadler on this material.
 
 [pat]: http://homepages.inf.ed.ac.uk/wadler/papers/propositions-as-types/propositions-as-types.pdf
 [pat-lambda-days]: https://www.youtube.com/watch?v=aeRVdYN6fE8
