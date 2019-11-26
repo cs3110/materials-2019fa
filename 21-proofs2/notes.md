@@ -831,3 +831,5 @@ forall properties P,
 
 - *Software Foundations*, volume 1, chapters Basic, Induction, Lists, Poly.
   Benjamin Pierce et al. https://softwarefoundations.cis.upenn.edu/
+  
+- Course materials for Princeton COS 326 by David Walker et al.

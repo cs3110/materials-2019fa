@@ -827,3 +827,5 @@ QED
 
 - *Thinking Functionally with Haskell*, chapter 6.  Richard Bird.  Cambridge,
   2015.
+  
+- Course materials for Princeton COS 326 by David Walker et al.
