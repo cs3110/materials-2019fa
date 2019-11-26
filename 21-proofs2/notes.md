@@ -588,15 +588,15 @@ let rec rev = function
   | h :: t -> rev t @ [h]
 ```
 (That is, of course, an inefficient implemention of `rev`.) You will need
-to choose which list to induct over.
+to choose which list to induct over.  You will need the previous exercise
+as a lemma, as well as the associativity of `append`, which was proved in the
+notes above.
 
 ### Exercise 4
 
 Prove that reverse is an involution, i.e., that 
   `forall lst, rev (rev lst) = lst`.
-Proceed by induction on `lst`.
-You will need the previous two exercises as lemmas, as well as the
-associativity of `append`, which was proved above as a theorem.
+Proceed by induction on `lst`. You will the previous exercise as a lemma.
 
 ### Exercise 5
 
@@ -630,7 +630,193 @@ the induction principle for that type.
 
 ## Solutions
 
-In progress.
+### Exercise 1
+
+```
+Claim: forall n, mult n Z = Z
+Proof: by induction on n
+P(n) = mult n Z = Z
+
+Base case: n = Z
+Show: mult Z Z = Z
+
+  mult Z Z
+=   { eval mult }
+  Z
+  
+Inductive case: n = S k
+Show: mult (S k) Z = Z
+IH: mult k Z = Z
+
+  mult (S k) Z
+=   { eval mult }
+  plus Z (mult k Z)
+=   { IH }
+  plus Z Z
+=   { eval plus }
+  Z
+  
+QED
+```
+
+### Exercise 2
+
+```
+Claim:  forall lst, lst @ [] = lst
+Proof: by induction on lst
+P(lst) = lst @ [] = lst
+
+Base case: lst = []
+Show: [] @ [] = []
+
+  [] @ []
+=   { eval @ }
+  []
+
+Inductive case: lst = h :: t
+Show: (h :: t) @ [] = h :: t
+IH: t @ [] = t
+
+  (h :: t) @ []
+=   { eval @ }
+  h :: (t @ [])
+=   { IH }
+  h :: t
+
+QED
+```
+
+### Exercise 3
+
+```
+Claim: forall lst1 lst2, rev (lst1 @ lst2) = rev lst2 @ rev lst1
+Proof: by induction on lst1
+P(lst1) = forall lst2, rev (lst1 @ lst2) = rev lst2 @ rev lst1
+
+Base case: lst1 = []
+Show: forall lst2, rev ([] @ lst2) = rev lst2 @ rev []
+
+  rev ([] @ lst2)
+=   { eval @ }
+  rev lst2
+
+  rev lst2 @ rev []
+=   { eval rev }
+  rev lst2 @ []
+=   { exercise 2 }
+  rev lst2
+  
+Inductive case: lst1 = h :: t
+Show: forall lst2, rev ((h :: t) @ lst2) = rev lst2 @ rev (h :: t)
+IH: forall lst2, rev (t @ lst2) = rev lst2 @ rev t
+
+  rev ((h :: t) @ lst2)
+=   { eval @ }
+  rev (h :: (t @ lst2))
+=   { eval rev }
+  rev (t @ lst2) @ [h]
+=   { IH }
+  (rev lst2 @ rev t) @ [h]
+  
+  rev lst2 @ rev (h :: t)
+=   { eval rev }
+  rev lst2 @ (rev t @ [h])
+=   { associativity of @, proved in notes above }
+  (rev lst2 @ rev t) @ [h]
+  
+QED
+```
+
+### Exercise 4
+
+```
+Claim: forall lst, rev (rev lst) = lst
+Proof: by induction on lst
+P(lst) = rev (rev lst) = lst
+
+Base case: lst = []
+Show: rev (rev []) = []
+
+  rev (rev []) 
+=   { eval rev, twice }
+  []
+  
+Inductive case: lst = h :: t
+Show: rev (rev (h :: t)) = h :: t
+IH: rev (rev t) = t
+
+  rev (rev (h :: t))
+=   { eval rev }
+  rev (rev t @ [h])
+=   { exercise 3 }
+  rev [h] @ rev (rev t)
+=   { IH }
+  rev [h] @ t
+=   { eval rev }
+  [h] @ t
+=   { eval @ }
+  h :: t
+  
+QED
+```
+
+## Exercise 5 
+
+```
+Claim: forall t, size (reflect t) = size t
+Proof: by induction on t
+P(t) = size (reflect t) = size t
+
+Base case: t = Leaf
+Show: size (reflect Leaf) = size Leaf
+
+  size (reflect Leaf)
+=   { eval reflect }
+  size Leaf
+
+Inductive case: t = Node (l, v, r)
+Show: size (reflect (Node (l, v, r))) = size (Node (l, v, r))
+IH1: size (reflect l) = size l
+IH2: size (reflect r) = size r
+
+  size (reflect (Node (l, v, r)))
+=   { eval reflect }
+  size (Node (reflect r, v, reflect l))
+=   { eval size }
+  1 + size (reflect r) + size (reflect l)
+=   { IH1 and IH2 }
+  1 + size r + size l
+
+  size (Node (l, v, r))
+=   { eval size }
+  1 + size l + size r
+=   { algebra }
+  1 + size r + size l
+
+QED
+```
+
+## Exercise 6
+
+```
+type prop = (* propositions *)
+  | Atom of string
+  | Neg of prop
+  | Conj of prop * prop
+  | Disj of prop * prop
+  | Imp of prop * prop
+
+Induction principle for prop:
+
+forall properties P,
+  if forall x, P(Atom x)
+  and forall q, P(q) implies P(Neg q)
+  and forall q r, (P(q) and P(r)) implies P(Conj (q,r))
+  and forall q r, (P(q) and P(r)) implies P(Disj (q,r))
+  and forall q r, (P(q) and P(r)) implies P(Imp (q,r))
+  then forall q, P(q)
+```
+
 
 ## Acknowledgements
 
