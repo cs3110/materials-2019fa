@@ -11,15 +11,17 @@ and
 
 (* Not yet right stream rep *)
 
-type 'a stream =
-  | Cons of 'a * 'a stream
+module BrokenStream = struct 
+  type 'a stream =
+    | Cons of 'a * 'a stream
 
-let rec ones = Cons (1, ones)
+  let rec ones = Cons (1, ones)
 
-let rec from n = 
-  Cons (n, from (n+1))
+  let rec from n = 
+    Cons (n, from (n+1))
 
-(* let nats = from 0 *) (* stack overflow *)
+  (* let nats = from 0 *) (* stack overflow *)
+end
 
 (* Working stream rep *)
 
@@ -71,3 +73,55 @@ let rec map2 f (Cons (h1, tf1)) (Cons (h2, tf2)) =
 
 let sum = map2 (+)
 let mult = map2 ( * )
+
+let rec filter f = function
+  | Cons (h, t) ->
+    if f h then Cons (h, fun () -> filter f (t ()))
+    else filter f (t ())
+
+(* delete multiples of m from a stream *)
+let sift m =
+  filter (fun n -> n mod m <> 0)
+
+(* sieve of Eratosthenes *)
+let rec sieve = function
+  | Cons (h, t) -> Cons (h, fun () -> sieve (sift h (t ())))
+
+(* primes *)
+let primes = sieve (from 2)
+
+(* laziness *)
+
+let _ = take 10_000 primes (* slow *)
+let lazy_primes10k = lazy (take 10_000 primes) (* immediate *)
+let primes10k = Lazy.force lazy_primes10k (* slow *)
+let primes10k_again = Lazy.force lazy_primes10k (* immediate *)
+
+module type MyLazy = sig
+  type 'a t
+  val my_lazy : (unit -> 'a) -> 'a t
+  val force : 'a t -> 'a
+end
+
+module MyLazy : MyLazy = struct
+  type 'a delayed =
+    | Unevaluated of (unit -> 'a)
+    | Evaluated of 'a
+
+  type 'a t = 'a delayed ref
+
+  let my_lazy thunk =
+    ref (Unevaluated thunk)
+
+  let force d =
+    match !d with
+    | Unevaluated thunk -> 
+      let result = thunk () in
+      d := Evaluated result;
+      result
+    | Evaluated result -> result
+end
+
+let my_lazy_primes10k = MyLazy.my_lazy (fun () -> take 10_000 primes) (* immediate *)
+let my_primes10k = MyLazy.force my_lazy_primes10k (* slow *)
+let my_primes10k_again = MyLazy.force my_lazy_primes10k (* immediate *)
