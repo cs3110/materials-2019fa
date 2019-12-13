@@ -640,7 +640,7 @@ Specification:
 4a. mult y (insert x b) = 1 + mult y b              if x = y
 4b. mult y (insert x b) = mult y b                  if x <> y
 5.  remove x empty = empty
-6a. remove y (insert x b) = remove y b              if x = y
+6a. remove y (insert x b) = b                       if x = y
 6b. remove y (insert x b) = insert x (remove y b)   if x <> y
 7.  insert x (insert y b) = insert y (insert x b)
 ```
